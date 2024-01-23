@@ -1,0 +1,36 @@
+class Solution {
+    // Time Complexity: O(N!) - There are N! permutations of an array of size N.
+    // Space Complexity: O(N) - The depth of the recursion stack.
+
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        generatePermutations(nums, 0, ans);
+        return ans;
+    }
+
+    private void generatePermutations(int[] nums, int index, List<List<Integer>> result) {
+        // If we reach the end of the array, add the current permutation to the result
+        if (index == nums.length) {
+            List<Integer> current = new ArrayList<>();
+            for (int num : nums) {
+                current.add(num);
+            }
+            result.add(current);
+            return;
+        }
+
+        // Generate permutations by swapping elements at the current index with each element to the right
+        for (int i = index; i < nums.length; i++) {
+            swap(nums, index, i);
+            generatePermutations(nums, index + 1, result);
+            swap(nums, index, i); // Backtrack to restore the original array
+        }
+    }
+
+    // Helper method to swap elements in the array
+    private void swap(int[] arr, int i, int j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+}
