@@ -1,2 +1,5 @@
 # Leetcode
-my leedcode solutions for studying purpose for my friends
+> my leedcode solutions for study purpose for my friends
+
+
+
