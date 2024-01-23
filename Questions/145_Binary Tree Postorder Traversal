@@ -1,0 +1,37 @@
+class Solution {
+    // Time Complexity: O(N) - We visit each node exactly once.
+    // Space Complexity: O(H) - The height of the tree, which is the maximum depth of the stack.
+
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+
+        if (root == null) return ans;
+
+        TreeNode prev = null;
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            TreeNode cur = stack.peek();
+
+            // If we are traversing down the tree
+            if (prev == null || cur == prev.left || cur == prev.right) {
+                if (cur.left != null) {
+                    stack.push(cur.left);
+                } else if (cur.right != null) {
+                    stack.push(cur.right);
+                } else { // This node is a leaf
+                    ans.add(cur.val);
+                    stack.pop();
+                }
+            } 
+            // If we are traversing up from the left subtree
+            else if (prev == cur.left) {
+                if (cur.right != null) {
+                    stack.push(cur.right);
+                } else { // No right subtree
+                    ans.add(cur.val);
+                    stack.pop();
+                }
+            } 
+      

@@ -1,0 +1,42 @@
+class Solution {
+    // Time Complexity: O(N) - We visit each node exactly once.
+    // Space Complexity: O(W) - The maximum width of the tree, which is the maximum number of nodes at any level.
+
+    public boolean isCompleteTree(TreeNode root) {
+        if (root == null) return true;
+
+        Queue<TreeNode> q = new ArrayDeque<>();
+        q.offer(root);
+        boolean seeNull = false;
+
+        while (!q.isEmpty()) {
+            TreeNode cur = q.poll();
+
+            // If the left child is null, mark it as seen
+            if (cur.left == null) {
+                seeNull = true;
+            } else if (seeNull) {
+                // If a null node was seen before, and the current node has a left child,
+                // it's not a complete tree.
+                return false;
+            } else {
+                // If the tree is still complete, add the left child for validation later
+                q.offer(cur.left);
+            }
+
+            // If the right child is null, mark it as seen
+            if (cur.right == null) {
+                seeNull = true;
+            } else if (seeNull) {
+                // If a null node was seen before, and the current node has a right child,
+                // it's not a complete tree.
+                return false;
+            } else {
+                // If the tree is still complete, add the right child for validation later
+                q.offer(cur.right);
+            }
+        }
+
+        return true;
+    }
+}
