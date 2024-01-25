@@ -1,0 +1,32 @@
+class Solution { 
+    //each tree split is decision of swap or not
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        generatePermutations(nums, 0, ans);
+        return ans;
+    }
+
+
+    private void generatePermutations(int[] nums, int index, List<List<Integer>> result) {
+        if (index == nums.length) {
+            List<Integer> current = new ArrayList<>();
+            for (int num : nums) {
+                current.add(num);
+            }
+            result.add(current);
+            return;
+        }
+
+        for (int i = index; i < nums.length; i++) {
+            swap(nums, index, i);
+            generatePermutations(nums, index + 1, result);
+            swap(nums, index, i); // Backtracking
+        }
+    }
+
+    private void swap(int[] arr, int i, int j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+}

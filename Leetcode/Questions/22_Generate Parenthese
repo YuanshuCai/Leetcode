@@ -1,0 +1,42 @@
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> ans = new ArrayList<>();
+        char[] cur = new char[2*n];
+        helper(ans, n, 0, 0, cur);
+        return ans;
+    }
+    //Solution 2 - char[] backtracking is done by editing char[]
+    private void helper(List<String> ans, int n, int l, int r, char[] cur){
+        //base case
+        if(l == n && r == n) {
+            ans.add(new String(cur));
+            return;
+        }
+        if (l < n){
+            cur[l+r] = '(';
+            helper(ans, n, l + 1, r, cur);
+        }
+        if (r < l){
+            cur[l+r] = ')';
+            helper(ans, n, l, r + 1, cur);
+        }
+        
+    }
+    //Solution 1
+    private void helper(List<String> ans, int l, int r, int max, StringBuilder sb){
+        if (l == max && r == max) {
+            ans.add(sb.toString());
+            return;
+        }
+        if (l < max){
+            sb.append('(');
+            helper(ans, l + 1, r, max, sb);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        if (r < l){
+            sb.append(')');
+            helper(ans, l, r + 1, max, sb);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+}
