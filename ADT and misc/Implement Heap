@@ -1,0 +1,152 @@
+import java.util.NoSuchElementException;
+import java.util.Arrays;
+
+public class MinHeap {
+    private int[] array;
+    private int size;
+
+    public MinHeap(int[] array) {
+        if (array == null || array.length == 0) {
+            throw new IllegalArgumentException("Input array cannot be null or empty");
+        }
+        this.array = array;
+        size = array.length;
+        heapify();
+    }
+
+    private void heapify() {
+        //O(n)
+        for (int i = size / 2 - 1; i >= 0; i--) {
+            percolateDown(i);
+        }
+    }
+
+    public MinHeap(int cap) {
+        if (cap <= 0) {
+            throw new IllegalArgumentException("Capacity cannot be negative or zero");
+        }
+        array = new int[cap];
+        size = 0;
+    }
+
+    public int size() {//O(1)
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public boolean isFull() {
+        return size == array.length;
+    }
+
+    private void percolateUp(int index) { //O(logn)
+        while (index > 0) {
+            int parentIndex = (index - 1) / 2;
+            if (array[parentIndex] > array[index]) {
+                swap(array, parentIndex, index);
+            } else {
+                break;
+            }
+            index = parentIndex;
+        }
+    }
+
+    private void percolateDown(int index) { //O(logn)
+        while (index <= size / 2 - 1) {
+            int leftChildIndex = index * 2 + 1;
+            int rightChildIndex = index * 2 + 2;
+            int swapCandidate = leftChildIndex;
+            if (rightChildIndex <= size - 1 && array[leftChildIndex] >= array[rightChildIndex]) {
+                swapCandidate = rightChildIndex;
+            }
+            if (array[index] > array[swapCandidate]) {
+                swap(array, index, swapCandidate);
+            } else {
+                break;
+            }
+            index = swapCandidate;
+        }
+    }
+
+    private void swap(int[] arr, int i, int j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+
+    public int peek() {
+        if (size == 0) {
+            throw new NoSuchElementException("Heap is empty");
+        }
+        return array[0];
+    }
+
+    public int poll() {
+        if (size == 0) {
+            throw new NoSuchElementException("Heap is empty");
+        }
+        int result = array[0];
+        array[0] = array[size - 1];
+        size--;
+        percolateDown(0);
+        return result;
+    }
+
+    public void offer(int ele) {
+        if (size == array.length) {
+            int[] newArray = new int[array.length * 3 / 2];
+            System.arraycopy(array, 0, newArray, 0, array.length);
+            array = newArray;
+        }
+        array[size] = ele;
+        size++;
+        percolateUp(size - 1);
+    }
+
+    public int update(int index, int ele) {
+        if (index < 0 || index > size - 1) {
+            throw new ArrayIndexOutOfBoundsException("Invalid index range");
+        }
+        int result = array[index];
+        array[index] = ele;
+        if (result > ele) {
+            percolateUp(index);
+        } else {
+            percolateDown(index);
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        // Test Case 1: Using an array to initialize the MinHeap
+        int[] array1 = {4, 10, 3, 5, 1};
+        MinHeap minHeap1 = new MinHeap(array1);
+        System.out.println("Min Heap 1: " + Arrays.toString(minHeap1.array));
+
+        // Test Case 2: Using the default constructor and offering elements
+        MinHeap minHeap2 = new MinHeap(5);
+        minHeap2.offer(8);
+        minHeap2.offer(2);
+        minHeap2.offer(6);
+        minHeap2.offer(1);
+        minHeap2.offer(4);
+        minHeap2.offer(3);
+        System.out.println("Min Heap 2: " + Arrays.toString(minHeap2.array));
+        minHeap2.poll();
+        System.out.println("Min Heap 2: " + Arrays.toString(minHeap2.array));
+        
+
+        // Test Case 3: Updating an element in the MinHeap
+        MinHeap minHeap3 = new MinHeap(5);
+        minHeap3.offer(8);
+        minHeap3.offer(2);
+        minHeap3.offer(6);
+        minHeap3.offer(1);
+        System.out.println("Min Heap 3 (Before Update): " + Arrays.toString(minHeap3.array));
+        int updatedElement = minHeap3.update(2, 4); // Update the element at index 2 to 4
+        System.out.println("Min Heap 3 (After Update): " + Arrays.toString(minHeap3.array));
+        System.out.println("Updated Element: " + updatedElement);
+    }
+}

@@ -1,0 +1,45 @@
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        // Create a min heap (PriorityQueue in Java by default is a min heap)
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for (int num : nums) {
+            minHeap.offer(num);
+            if (minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+        return minHeap.peek();
+    }
+}
+/*
+//quick select is another way - worst case O(n^2)
+//Use maxHeap
+public int findKthLargest(int[] nums, int k) {
+        // Create a max heap with a custom comparator
+        // PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer a, Integer b) {
+                // Reverse order to create a max heap
+                return b.compareTo(a);
+            }
+        });
+
+        // Alternatively, you can use a lambda expression:
+        // PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+
+        // Add elements to the max heap
+        for (int num : nums) {
+            maxHeap.offer(num);
+
+            // If the size of the heap exceeds k, remove the largest element
+            if (maxHeap.size() > k) {
+                maxHeap.poll();
+            }
+        }
+
+        // The remaining element at the top of the max heap is the kth largest element
+        return maxHeap.peek();
+    }
+*/
