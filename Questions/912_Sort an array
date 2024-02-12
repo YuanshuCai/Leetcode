@@ -1,0 +1,84 @@
+class Solution {
+    public int[] sortArray(int[] nums) {
+        //random pick pivot
+        //partition smaller left bigger right
+        //left and right partition - recursion
+        quickSort(nums, 0, nums.length - 1);
+        return nums;
+    }
+    private void quickSort(int[] array, int l, int r){
+        if (l >= r) return;
+        int cur = partition(array, l, r);
+        quickSort(array, l, cur - 1);
+        quickSort(array, cur + 1, r);
+    }
+    private int partition(int[] array, int l, int r){
+        int pivotIndex = random(l, r);
+        int pivot = array[pivotIndex];
+        if (pivotIndex != r) swap(array, pivotIndex, r);
+        int rightBound = r - 1;
+        while (l <= rightBound){
+            if (array[l] <= pivot){
+                l++;
+            } else if (array[rightBound] >= pivot){
+                rightBound--;
+            }else{
+                swap(array, l++, rightBound--);
+            }
+        }
+        swap(array, l, r);
+        return l;
+    }
+    //
+    private int random(int l, int r){
+        int random = l + (int)(Math.random() * (r - l + 1));
+        return random;
+    }
+    private void swap(int[] array, int l, int r){
+        int tmp = array[l];
+        array[l] = array[r];
+        array[r] = tmp;
+    
+    }
+}
+/*
+//merge sort
+class Solution {
+    public int[] sortArray(int[] nums) {
+        int l = 0, r = nums.length - 1;
+        splitArray(nums, l, r);
+        return nums;
+    }
+    private void splitArray(int[] array, int l, int r){
+        if(l >= r) return;
+        int m = l + (r - l) / 2;
+        splitArray(array, l, m);
+        splitArray(array, m + 1 , r);
+        mergeArray(array, l, m, r);
+
+    }
+    private void mergeArray(int[] array, int l, int m, int r){
+        int[] helper = new int[array.length];
+        for(int i = l; i <= r ; i++){
+            helper[i] = array[i];
+        }
+        int arr1Index = l, arr2Index = m + 1;
+        while (arr1Index <= m && arr2Index <= r){
+            if(helper[arr1Index] <= helper[arr2Index]){
+                array[l] = helper[arr1Index];
+                l++;
+                arr1Index++;
+            } else {
+                array[l] = helper[arr2Index];
+                l++;
+                arr2Index++;
+            }
+        }
+        while (arr1Index <= m){
+            array[l] = helper[arr1Index];
+            l++;
+            arr1Index++;
+        }
+    }
+}
+ */
