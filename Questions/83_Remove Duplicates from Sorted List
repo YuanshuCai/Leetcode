@@ -1,0 +1,40 @@
+/*
+ 
+ 1 -> 1 ->-2 -> 3 -> 3 -> null
+                s
+                          f
+ 
+ class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        //if (head == null || head.next == null) return head;
+        ListNode cur = head;
+        while (cur != null && cur.next != null){
+            if (cur.val == cur.next.val){
+                    cur.next = cur.next.next;
+            } else {
+                cur = cur.next;
+            }
+        }
+        return head;
+    }
+}*/
+
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode dummyHead = new ListNode(0, head);
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null){
+            if (slow.val != fast.val){
+                slow.next = fast;
+                slow = slow.next;   
+            }
+            fast = fast.next;
+        }
+        //how to handle the trailing repeat
+        slow.next = null;
+        return dummyHead.next;
+    }
+    
+}
